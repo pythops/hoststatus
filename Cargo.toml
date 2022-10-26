@@ -1,0 +1,10 @@
+[package]
+name = "hoststatus"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tabled = { version = "0.9.0", features = ["color"] }
+openssl = "0.10.42"
+argh = "0.1.9"
+anyhow = "1.0.66"
