@@ -18,9 +18,8 @@ Options:
 ## Example
 ```
 $ cargo run -- --host pythops.com
-
 +-------------+--------+--------------------------+-------+
-|  hostname   | status |     expiration date      | infos |
+|  hostname   | status | TLS cert expiration date | infos |
 +-------------+--------+--------------------------+-------+
 | pythops.com |   UP   | Nov 26 17:25:25 2022 GMT |       |
 +-------------+--------+--------------------------+-------+
