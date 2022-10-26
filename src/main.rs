@@ -33,7 +33,7 @@ impl fmt::Display for HostStatus {
 struct HostInfos {
     hostname: String,
     status: HostStatus,
-    #[tabled(rename = "expiration date")]
+    #[tabled(rename = "TLS cert expiration date")]
     expires_at: String,
     infos: String,
 }
