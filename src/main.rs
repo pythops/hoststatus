@@ -1,4 +1,3 @@
-use anyhow;
 use argh::FromArgs;
 use std::path::PathBuf;
 use std::process::exit;
@@ -16,15 +15,15 @@ use openssl::ssl::{SslConnector, SslMethod};
 use std::net::TcpStream;
 
 enum HostStatus {
-    UP,
-    DOWN,
+    Up,
+    Down,
 }
 
 impl fmt::Display for HostStatus {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match &self {
-            HostStatus::UP => write!(f, "UP"),
-            HostStatus::DOWN => write!(f, "DOWN"),
+            HostStatus::Up => write!(f, "Up"),
+            HostStatus::Down => write!(f, "Down"),
         }
     }
 }
@@ -62,7 +61,7 @@ fn get_certificate_expiration_date(
             let not_after = cert.not_after();
             Ok(Some(not_after.to_string()))
         }
-        None => return Ok(None),
+        None => Ok(None),
     }
 }
 
@@ -73,26 +72,26 @@ fn get_hosts_infos(hostnames: Vec<String>) -> Vec<HostInfos> {
             Ok(expiration_dates) => match expiration_dates {
                 Some(expires_at) => {
                     output.push(HostInfos {
-                        hostname: hostname,
-                        status: HostStatus::UP,
-                        expires_at: expires_at,
-                        infos: "".to_string(),
+                        hostname,
+                        status: HostStatus::Up,
+                        expires_at,
+                        infos: String::new(),
                     });
                 }
                 None => {
                     output.push(HostInfos {
-                        hostname: hostname,
-                        status: HostStatus::UP,
-                        expires_at: "".to_string(),
+                        hostname,
+                        status: HostStatus::Up,
+                        expires_at: String::new(),
                         infos: "Certificate not found".to_string(),
                     });
                 }
             },
             Err(e) => {
                 output.push(HostInfos {
-                    hostname: hostname,
-                    status: HostStatus::DOWN,
-                    expires_at: "".to_string(),
+                    hostname,
+                    status: HostStatus::Down,
+                    expires_at: String::new(),
                     infos: format!("Error: {}", e),
                 });
             }
@@ -104,9 +103,7 @@ fn get_hosts_infos(hostnames: Vec<String>) -> Vec<HostInfos> {
 fn main() -> anyhow::Result<()> {
     let args: Cli = argh::from_env();
 
-    let output;
-
-    match args {
+    let output = match args {
         Cli {
             host: None,
             path: None,
@@ -121,15 +118,13 @@ fn main() -> anyhow::Result<()> {
             let f = File::open(path)?;
             let f = BufReader::new(f);
             let lines: Vec<String> = f.lines().collect::<Result<_, _>>().unwrap();
-            output = get_hosts_infos(lines);
+            get_hosts_infos(lines)
         }
         Cli {
             host: Some(host),
             path: None,
-        } => {
-            output = get_hosts_infos(vec![host]);
-        }
-    }
+        } => get_hosts_infos(vec![host]),
+    };
 
     let table = Table::new(output)
         .with(Style::ascii())
