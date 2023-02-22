@@ -1,7 +1,9 @@
 # hoststatus
-**hoststatus** is a simple cli to check website status.
+
+**hoststatus** is a simple cli to check hostname status.
 
 ## Usage
+
 ```
 $ cargo run -- --help
 Usage: hoststatus [--host <host>] [--path <path>]
@@ -16,6 +18,7 @@ Options:
 ```
 
 ## Example
+
 ```
 $ cargo run -- --host pythops.com
 +-------------+--------+--------------------------+-------+
@@ -25,8 +28,6 @@ $ cargo run -- --host pythops.com
 +-------------+--------+--------------------------+-------+
 ```
 
-## Note
-The code quality is not optimal and I know it, I'm still learning Rust, so it will be improved at some point.
-
 ## License
+
 GPLv3
