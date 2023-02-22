@@ -1,0 +1,27 @@
+---
+on:
+  push:
+    branches:
+      - "*"
+    tags:
+      - "!*"
+name: Test
+jobs:
+  test:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: taiki-e/install-action@just
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          component: clippy rustfmt
+
+      - name: Install nextest
+        uses: taiki-e/install-action@nextest
+
+      - name: Run linting
+        run: just lint
+
+      - name: Run debug builds
+        run: just build
